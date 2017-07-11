@@ -42,11 +42,16 @@ contract('SimpleIdentity', function(accounts) {
       console.log("Gas used by initial tx", tx.receipt.gasUsed)
       return simpleIdentity.changeAll(identifier, user1, recovery, bytes)
     }).then(tx => {
-      let log = tx.logs[0]
-      assert.equal(log.event, "Claimed", "Wrong event")
-      assert.equal(log.args.owner, user1, "Wrong Owner")
-      assert.equal(log.args.recovery, recovery, "Wrong Recovery")
-      assert.equal(log.args.DDO, bytes, "Wrong DDO")
+      let log1 = tx.logs[0]
+      let log2 = tx.logs[1]
+      let log3 = tx.logs[2]
+
+      assert.equal(log1.event, "OwnerChanged", "Wrong event")
+      assert.equal(log2.event, "RecoveryChanged", "Wrong event")
+      assert.equal(log3.event, "DDOChanged", "Wrong event")
+      assert.equal(log1.args.newOwner, user1, "Wrong Owner")
+      assert.equal(log2.args.newRecovery, recovery, "Wrong Recovery")
+      assert.equal(log3.args.newDDO, bytes, "Wrong DDO")
       console.log("Gas used by next tx", tx.receipt.gasUsed)
     })
   })
